@@ -5,47 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CHALERMCHAICHAN - CHECKIN</title>
   <style>
-    /* ล็อกหน้าจอหลักไม่ให้ส่ายซ้ายขวา */
     html, body {
       margin: 0; padding: 0;
-      width: 100%;
-      min-height: 100%;
-      overflow-x: hidden; 
+      width: 100%; height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto; /* ให้เลื่อนที่นี่ที่เดียว */
       background-color: #f0f2f5;
+      -webkit-overflow-scrolling: touch;
     }
-
-    .app-container {
-      width: 100%;
-      /* ปล่อยให้ Container ขยายตามความยาว iframe */
-      height: auto;
-      display: block;
-    }
-
     iframe {
       width: 100%;
-      /* บังคับความสูงให้ยาวพอสำหรับหน้าแอปนาย (เพิ่มเลขนี้ถ้ายังเห็นไม่ครบ) */
-      height: 2500px; 
+      height: 1000px; /* ค่าเริ่มต้น */
       border: none;
       display: block;
-      /* ปิดการเลื่อนในตัว iframe อย่างเด็ดขาด */
-      overflow: hidden; 
+      overflow: hidden; /* ปิด scroll ชั้นในเด็ดขาด */
     }
   </style>
 </head>
 <body>
-
-  <div class="app-container">
-    <iframe
-      id="myIframe"
-      src="https://script.google.com/macros/s/AKfycbwfn_UrOF93GjzHeVLYcqfTZlav8KuTcyBmnTZw8_cim6gAR-zll3cQ60gpJ0IaCLgc/exec"
-      allow="geolocation; camera"
-      scrolling="no">
-    </iframe>
-  </div>
+  <iframe id="myIframe" src="https://script.google.com/macros/s/AKfycbwfn_UrOF93GjzHeVLYcqfTZlav8KuTcyBmnTZw8_cim6gAR-zll3cQ60gpJ0IaCLgc/exec" allow="geolocation; camera" scrolling="no"></iframe>
 
   <script>
-    // เทคนิคป้องกัน Scroll เด้งบน iPhone
-    document.addEventListener('touchstart', function(){}, {passive: true});
+    // รอรับค่าความสูงจากแอป Google เพื่อปรับตัว iframe ให้ยาวตามจริง
+    window.addEventListener('message', function(e) {
+      if (e.data.hasOwnProperty('frameHeight')) {
+        document.getElementById('myIframe').style.height = e.data.frameHeight + 'px';
+      }
+    }, false);
   </script>
 </body>
 </html>
