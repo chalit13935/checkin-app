@@ -5,46 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CHALERMCHAICHAN - CHECKIN</title>
   <style>
+    /* ล็อกพื้นหลังไม่ให้ดิ้น */
     html, body {
       margin: 0; padding: 0;
       width: 100%; height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto; /* ให้เลื่อนที่นี่ที่เดียว */
+      overflow: auto; /* เปิดให้เลื่อนที่ตัว Body แทน */
       background-color: #f0f2f5;
-      -webkit-overflow-scrolling: touch;
+      -webkit-overflow-scrolling: touch; /* ทำให้การเลื่อนบน iOS ลื่นไหล */
     }
-    iframe {
+
+    .app-container {
       width: 100%;
-      height: 1000px; /* ค่าเริ่มต้น */
+      display: block;
+    }
+
+    iframe {
+      width: 1px;
+      min-width: 100%;
+      /* ปรับความสูงให้ยาวเฟื้อยไว้ก่อน เพื่อให้เนื้อหาข้างในไม่ถูกบีบ */
+      min-height: 2000px; 
       border: none;
       display: block;
-      overflow: hidden; /* ปิด scroll ชั้นในเด็ดขาด */
     }
   </style>
 </head>
 <body>
-  <iframe id="myIframe" src="https://script.google.com/macros/s/AKfycbwfn_UrOF93GjzHeVLYcqfTZlav8KuTcyBmnTZw8_cim6gAR-zll3cQ60gpJ0IaCLgc/exec" allow="geolocation; camera" scrolling="no"></iframe>
 
-  <script>
-    // รอรับค่าความสูงจากแอป Google เพื่อปรับตัว iframe ให้ยาวตามจริง
-    window.addEventListener('message', function(e) {
-      if (e.data.hasOwnProperty('frameHeight')) {
-        document.getElementById('myIframe').style.height = e.data.frameHeight + 'px';
-      }
-    }, false);
-  </script>
-<script>
-  function sendHeight() {
-    // คำนวณความสูงจริงของเนื้อหาแอป
-    const height = document.body.scrollHeight;
-    // ส่งไปบอกหน้ากาก GitHub
-    window.parent.postMessage({ 'frameHeight': height }, '*');
-  }
+  <div class="app-container">
+    <iframe
+      src="https://script.google.com/macros/s/AKfycbw1nbGnMtt6M5Ti5Lnmc3g1MeOP4k3PX_kRVUzx0cgmpeLYYniwYfJjL_etr6czMbePrA/exec"
+      allow="geolocation; camera"
+      scrolling="no"> </iframe>
+  </div>
 
-  // ส่งค่าทันทีที่โหลดเสร็จ และทุกครั้งที่มีการคลิก (ป้องกันหน้าจอยืดแล้วขาด)
-  window.addEventListener('load', sendHeight);
-  window.addEventListener('click', () => setTimeout(sendHeight, 300));
-</script>
-  
 </body>
 </html>
