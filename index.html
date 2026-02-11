@@ -33,5 +33,18 @@
       }
     }, false);
   </script>
+<script>
+  function sendHeight() {
+    // คำนวณความสูงจริงของเนื้อหาแอป
+    const height = document.body.scrollHeight;
+    // ส่งไปบอกหน้ากาก GitHub
+    window.parent.postMessage({ 'frameHeight': height }, '*');
+  }
+
+  // ส่งค่าทันทีที่โหลดเสร็จ และทุกครั้งที่มีการคลิก (ป้องกันหน้าจอยืดแล้วขาด)
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('click', () => setTimeout(sendHeight, 300));
+</script>
+  
 </body>
 </html>
