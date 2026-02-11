@@ -5,28 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CHALERMCHAICHAN - CHECKIN</title>
   <style>
-    /* ล็อกหน้ากากไม่ให้ขยับซ้ายขวา */
+    /* ปล่อยให้ Body เลื่อนได้อิสระ ไม่ต้องล็อกความสูง */
     html, body {
       margin: 0; padding: 0;
-      width: 100%; height: 100%;
-      overflow-x: hidden; /* ห้ามส่ายซ้ายขวา */
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden; /* กันส่ายซ้ายขวาอย่างเดียว */
+      -webkit-overflow-scrolling: touch;
       background-color: #f0f2f5;
     }
 
-    /* ตัวครอบที่ยอมให้เลื่อนแนวตั้งได้อิสระ */
     .app-container {
       width: 100%;
-      height: 100vh; /* ความสูงเท่าหน้าจอพอดี */
-      overflow-y: auto; /* เปิดให้เลื่อนขึ้นลงได้ที่นี่ */
-      -webkit-overflow-scrolling: touch; /* เทคนิคทำให้เลื่อนลื่นบน iOS (iPhone) */
+      display: block;
     }
 
     iframe {
       width: 100%;
-      /* ปรับความสูงขั้นต่ำให้ยาวพอสำหรับทุกเมนู (ห้ามตั้งสั้นไป) */
-      min-height: 1800px; 
+      /* ใช้หน่วย vh เพื่อคำนวณความสูงให้ครอบคลุม */
+      min-height: 180vh; 
       border: none;
       display: block;
+      overflow: hidden;
     }
   </style>
 </head>
@@ -36,7 +36,8 @@
     <iframe
       src="https://script.google.com/macros/s/AKfycbwfn_UrOF93GjzHeVLYcqfTZlav8KuTcyBmnTZw8_cim6gAR-zll3cQ60gpJ0IaCLgc/exec"
       allow="geolocation; camera"
-      scrolling="no"> </iframe>
+      scrolling="no">
+    </iframe>
   </div>
 
 </body>
