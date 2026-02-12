@@ -1,29 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CHALERMCHAICHAN - CHECKIN</title>
+  <title>CHALERMCHAICHAN SYSTEM</title>
   <style>
-    /* ล็อกพื้นหลังไม่ให้ดิ้น */
+    /* ล็อกพื้นหลังให้ลื่นไหล */
     html, body {
       margin: 0; padding: 0;
       width: 100%; height: 100%;
-      overflow: auto; /* เปิดให้เลื่อนที่ตัว Body แทน */
       background-color: #f0f2f5;
-      -webkit-overflow-scrolling: touch; /* ทำให้การเลื่อนบน iOS ลื่นไหล */
+      overflow-x: hidden;
     }
 
     .app-container {
       width: 100%;
-      display: block;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     iframe {
-      width: 1px;
-      min-width: 100%;
-      /* ปรับความสูงให้ยาวเฟื้อยไว้ก่อน เพื่อให้เนื้อหาข้างในไม่ถูกบีบ */
-      min-height: 20000px; 
+      width: 100%;
+      height: 100vh; /* ให้เต็มหน้าจอไว้ก่อน */
       border: none;
       display: block;
     }
@@ -33,10 +32,30 @@
 
   <div class="app-container">
     <iframe
-      src="https://script.google.com/macros/s/AKfycbw1nbGnMtt6M5Ti5Lnmc3g1MeOP4k3PX_kRVUzx0cgmpeLYYniwYfJjL_etr6czMbePrA/exec"
-      allow="geolocation; camera"
-      scrolling="no"> </iframe>
+      id="appFrame"
+      src="https://script.google.com/macros/s/AKfycby71DKYLTAQOgD5eaiS4NBQtjfPxaTkR9Hu-v5NRnTGEHrCdlZwekwOQDrK4Hsd08iq2A/exec"
+      allow="geolocation *; camera *; microphone *"
+      scrolling="yes"> 
+    </iframe>
   </div>
+
+  <script>
+    // ระบบรับสัญญาณจาก Google Apps Script เพื่อปรับความสูงอัตโนมัติ
+    window.addEventListener('message', function(e) {
+      if (e.data.frameHeight) {
+        var frame = document.getElementById('appFrame');
+        if (frame) {
+          // ปรับความสูงของ Iframe ตามเนื้อหาจริงที่ส่งมา
+          frame.style.height = e.data.frameHeight + 'px';
+        }
+      }
+    }.bind(this), false);
+
+    // ป้องกันการลากเพื่อ Refresh (Pull-to-refresh) บนมือถือในบางเคส
+    document.addEventListener('touchmove', function(e) {
+      if (e.scale !== 1) { e.preventDefault(); }
+    }, { passive: false });
+  </script>
 
 </body>
 </html>
