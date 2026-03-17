@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CHALERMCHAICHAN SYSTEM</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CC-System">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#ef4d4d">
+  
+  <link rel="preconnect" href="https://script.google.com">
+  
   <style>
     /* ล็อกพื้นหลังให้ลื่นไหล */
     html, body {
@@ -11,36 +20,74 @@
       width: 100%; height: 100%;
       background-color: #f0f2f5;
       overflow-x: hidden;
+      /* ป้องกันการกระตุกเวลาเลื่อนบน iOS */
+      -webkit-overflow-scrolling: touch;
     }
 
     .app-container {
       width: 100%;
-      height: 100%;
+      height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     iframe {
       width: 100%;
-      height: 100vh; /* ให้เต็มหน้าจอไว้ก่อน */
+      height: 100%; /* ปรับให้เต็ม Container */
       border: none;
       display: block;
+      transition: opacity 0.5s ease; /* เพิ่มความสมูทตอนโหลด */
     }
+
+    /* ตกแต่ง Loading ระหว่างรอ Iframe */
+    #loading-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99;
+      transition: opacity 0.5s ease;
+    }
+    .loader {
+      width: 40px; height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ef4d4d;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
+
+  <div id="loading-screen">
+    <div class="loader"></div>
+  </div>
 
   <div class="app-container">
     <iframe
       id="appFrame"
       src="https://script.google.com/macros/s/AKfycby8Az8RWH05ix0hqmqOLpNHeCqYleAaBQMMod_eO3jWVUl2NnvuEwDj8uZ4TEFJJwXlXQ/exec"
       allow="geolocation *; camera *; microphone *"
-      scrolling="yes"> 
+      scrolling="yes"
+      onload="hideLoader()"> 
     </iframe>
   </div>
 
   <script>
-    // ระบบรับสัญญาณจาก Google Apps Script เพื่อปรับความสูงอัตโนมัติ
+    // ฟังก์ชันซ่อนตัวโหลดเมื่อ Iframe มาแล้ว
+    function hideLoader() {
+      document.getElementById('loading-screen').style.opacity = '0';
+      setTimeout(function() {
+        document.getElementById('loading-screen').style.display = 'none';
+      }, 500);
+    }
+
+    // ระบบรับสัญญาณจาก Google Apps Script เพื่อปรับความสูงอัตโนมัติ (คงไว้ตามเดิม)
     window.addEventListener('message', function(e) {
       if (e.data.frameHeight) {
         var frame = document.getElementById('appFrame');
@@ -51,7 +98,7 @@
       }
     }.bind(this), false);
 
-    // ป้องกันการลากเพื่อ Refresh (Pull-to-refresh) บนมือถือในบางเคส
+    // ป้องกัน Pull-to-refresh บนมือถือ (คงไว้ตามเดิม)
     document.addEventListener('touchmove', function(e) {
       if (e.scale !== 1) { e.preventDefault(); }
     }, { passive: false });
